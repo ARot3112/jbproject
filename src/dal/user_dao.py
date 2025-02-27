@@ -1,7 +1,6 @@
 from src.dal.database import jb_db_conn
 import psycopg.sql 
 import psycopg.rows as pgrows
-from src.services.user_service import UserServices
 from src.models.user_dto import UserDto
 
 
@@ -16,7 +15,6 @@ class UserDao:
         print(result)
     
     def insert_into_users(self,user_dto):
-        UserServices.validate_user_before_insert(user_dto)
         with jb_db_conn.cursor() as cur:
             cur.execute(psycopg.sql.SQL("INSERT INTO {} (first_name,last_name,email,password,role_id) VALUES (%s,%s,%s,%s,%s);").format(psycopg.sql.Identifier(self.table_name)),(user_dto.first_name,user_dto.last_name,user_dto.email,user_dto.password,user_dto.role_id))
             jb_db_conn.commit()

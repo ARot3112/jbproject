@@ -2,7 +2,7 @@ CREATE TABLE roles(id SERIAL PRIMARY KEY,name VARCHAR(10) UNIQUE NOT NULL);
 CREATE TABLE users (id SERIAL PRIMARY KEY,first_name VARCHAR(20),last_name VARCHAR(20),email VARCHAR(30) UNIQUE NOT NULL,password VARCHAR(20) NOT NULL,role_id INT REFERENCES roles(id) );
 CREATE TABLE countries (id SERIAL PRIMARY KEY,country_name VARCHAR(25) UNIQUE NOT NULL);
 CREATE TABLE vacations (id SERIAL PRIMARY KEY,country_id INT REFERENCES countries(id),vacation_description VARCHAR(60),arrival DATE,departure DATE,price INT,file_name VARCHAR(50));
-CREATE TABLE likes (user_id INT REFERENCES users(id),vacation_id INT REFERENCES vacations(id));
+CREATE TABLE likes (user_id INT REFERENCES users(id) ON DELETE CASCADE ,vacation_id INT REFERENCES vacations(id)  ON DELETE CASCADE );
 
 INSERT INTO roles (name) VALUES
 ('user'),

@@ -14,7 +14,8 @@ class VacationDao:
         print(result)
     
     def insert_into_vacations(self,country_id,vacation_description,arrival,departure,price,file_name):
-        with jb_db_conn.cursor() as cur:
+         print(f"Inserting into DB: {country_id}, {vacation_description}, {arrival}, {departure}, {price}, {file_name}")
+         with jb_db_conn.cursor() as cur:
             cur.execute(psycopg.sql.SQL("INSERT INTO {} (country_id,vacation_description,arrival,departure,price,file_name) VALUES (%s,%s,%s,%s,%s,%s);").format(psycopg.sql.Identifier(self.table_name)),(country_id,vacation_description,arrival,departure,price,file_name))
             jb_db_conn.commit()
 
@@ -33,3 +34,8 @@ class VacationDao:
         with jb_db_conn.cursor() as cur:
             cur.execute(psycopg.sql.SQL("DELETE FROM {} WHERE id = %s;").format(psycopg.sql.Identifier(self.table_name)),(id,))
             jb_db_conn.commit()
+    
+    def get_vacation_arrival_departure_time(self,arrival,departure):
+        with jb_db_conn.cursor() as cur:
+            cur.execute("SELECT arrival,departure FROM vacations WHERE arrival = %s and departure = %s;",(arrival,departure))
+    
