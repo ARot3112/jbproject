@@ -27,7 +27,7 @@ INSERT INTO countries (country_name) VALUES
 
 INSERT INTO vacations (country_id,vacation_description,arrival,departure,price,file_name) VALUES
 (1,'Amazing trip to Spain','2025-06-12','2025-06-20',2000,'spain_trip.jpg'),
-(2,'Great adventure to ISR','2026-11-20','2025-11-25',2000,'isr_trip.jpg'),
+(2,'Great adventure to ISR','2026-11-20','2026-11-25',2000,'isr_trip.jpg'),
 (3,'An unforgettable journey to Brazil, including a football game','2027-10-05','2025-10-15',2000,'brazil_trip.jpg'),
 (4,'Exploring the rich history and culture of Hungary','2029-07-12','2025-07-19',2000,'hungary_trip.jpg'),
 (5,'A romantic escape in France, visiting iconic landmarks.','2025-09-14','2025-09-20',2000,'france_trip.jpg'),
@@ -41,6 +41,10 @@ INSERT INTO vacations (country_id,vacation_description,arrival,departure,price,f
 
 ALTER TABLE vacations
 ALTER COLUMN vacation_description TYPE TEXT;
+
+ALTER TABLE likes ADD CONSTRAINT unique_like 
+UNIQUE (user_id, vacation_id);
+
 
 
 
