@@ -1,7 +1,7 @@
 from src.dal.database import jb_db_conn
 import psycopg.sql 
 import psycopg.rows as pgrows
-
+from src.models.vacation_dto import VacationDto
 
 class VacationDao:
     def __init__(self):
@@ -13,10 +13,9 @@ class VacationDao:
             result = cur.fetchall()
         print(result)
     
-    def insert_into_vacations(self,country_id,vacation_description,arrival,departure,price,file_name):
-         print(f"Inserting into DB: {country_id}, {vacation_description}, {arrival}, {departure}, {price}, {file_name}")
+    def insert_into_vacations(self,vacation_dto):
          with jb_db_conn.cursor() as cur:
-            cur.execute(psycopg.sql.SQL("INSERT INTO {} (country_id,vacation_description,arrival,departure,price,file_name) VALUES (%s,%s,%s,%s,%s,%s);").format(psycopg.sql.Identifier(self.table_name)),(country_id,vacation_description,arrival,departure,price,file_name))
+            cur.execute(psycopg.sql.SQL("INSERT INTO {} (country_id,vacation_description,arrival,departure,price,file_name) VALUES (%s,%s,%s,%s,%s,%s);").format(psycopg.sql.Identifier(self.table_name)),(vacation_dto.country_id,vacation_dto.vacation_description,vacation_dto.arrival,vacation_dto.departure,vacation_dto.price,vacation_dto.file_name))
             jb_db_conn.commit()
 
     def get_vacation_info_by_id(self,id):

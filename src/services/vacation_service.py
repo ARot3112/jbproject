@@ -14,7 +14,6 @@ class VacationService:
         return result
     
     def validate_insert_of_new_vacation(self,vacation_dto):
-        print("validating")
         if not isinstance(vacation_dto,VacationDto):
             raise ValueError("You must enter all of the fields to insert new vacation")
         
@@ -39,13 +38,8 @@ class VacationService:
         
     def insert_new_vacation_after_validation(self,vacation_dto):
         self.validate_insert_of_new_vacation(vacation_dto)
-        self.vacation_dao.insert_into_vacations(
-         vacation_dto.country_id,
-         vacation_dto.vacation_description,
-         vacation_dto.arrival,
-         vacation_dto.departure,
-         vacation_dto.price,
-         vacation_dto.file_name)
+        self.vacation_dao.insert_into_vacations(vacation_dto)
+       
         
     
     def update_vacation_after_validation(self,vacation_dto,id,column,new_value):
