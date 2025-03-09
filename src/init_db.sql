@@ -45,7 +45,7 @@ ALTER COLUMN vacation_description TYPE TEXT;
 ALTER TABLE likes ADD CONSTRAINT unique_like 
 UNIQUE (user_id, vacation_id);
 
-
+                         ------ ^ jb_database ^ ------
 
 
 
