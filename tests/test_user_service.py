@@ -157,7 +157,7 @@ class TestInvalidUserService(BaseTestUserService):
         """
         Test liking a vacation with an invalid vacation ID.
         """
-        likes_dto = LikesDto(self.user_id, '9999')  # Invalid vacation ID
+        likes_dto = LikesDto(self.user_id, '9999') 
         with self.assertRaises(TypeError):
             self.user_service.like_a_vacation(likes_dto)
 
@@ -165,7 +165,7 @@ class TestInvalidUserService(BaseTestUserService):
         """
         Test logging in a user with an invalid password.
         """
-        user_dto = UserDto('Test', 'User', 'Example@gmail.com', 'pas', 1)  # Invalid password
+        user_dto = UserDto('Test', 'User', 'Example@gmail.com', 'pas', 1)  
         with self.assertRaises(ValueError):
             self.user_service.log_in_user(user_dto)
 
@@ -173,7 +173,7 @@ class TestInvalidUserService(BaseTestUserService):
         """
         Test unliking a vacation with invalid parameters.
         """
-        like_dto = LikesDto('31', '99')  # Invalid user ID and vacation ID
+        like_dto = LikesDto('31', '99')  
         with self.assertRaises(TypeError):
             self.user_service.un_like_a_vacation(like_dto)
 

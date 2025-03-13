@@ -43,7 +43,7 @@ class VacationService:
         if vacation_dto.arrival > vacation_dto.departure:
             raise ValueError("Arrival date cannot be later than departure date")
 
-        if self.vacation_dao.get_vacation_arrival_departure_time(vacation_dto.arrival, vacation_dto.departure):
+        if self.vacation_dao.get_vacation_arrival_departure_time(vacation_dto.arrival, vacation_dto.departure) is not None:
             raise ValueError("You can't enter an existing arrival, departure dates")
 
     def validate_update_of_new_vacation(self, vacation_dto: VacationDto, column: str, new_value: str) -> None:
