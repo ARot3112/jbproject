@@ -1,0 +1,17 @@
+.delete-vacation-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.delete-vacation-form form {
+    padding: 5px;
+    border: 2px solid brown;
+
+}
+
+.delete-vacation-form input {
+    margin: 5px;
+}

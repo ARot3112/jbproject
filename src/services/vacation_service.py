@@ -1,6 +1,6 @@
 from src.dal.vacation_dao import VacationDao
 from src.models.vacation_dto import VacationDto
-from src.dal.database import test_db_conn
+from src.dal.database import db_conn
 import psycopg.sql
 from typing import List, Optional
 
@@ -21,7 +21,7 @@ class VacationService:
         :param order_by_column: The column to order the results by (default is "price")
         :return: A list of tuples representing vacation data
         """
-        with test_db_conn.cursor() as cur:
+        with db_conn.cursor() as cur:
             cur.execute(psycopg.sql.SQL(
                 "SELECT * FROM vacations ORDER BY {} ASC;").format(psycopg.sql.Identifier(order_by_column)))
             result = cur.fetchall()
@@ -35,16 +35,19 @@ class VacationService:
         :raises ValueError: If any of the validation checks fail (e.g., price, date)
         """
         if not isinstance(vacation_dto, VacationDto):
-            raise ValueError("You must enter all of the fields to insert new vacation")
+            raise ValueError(
+                "You must enter all of the fields to insert new vacation")
 
-        if vacation_dto.price < 0 or vacation_dto.price > 10000:
-            raise ValueError("Price cannot be negative or more than 10000")
+        if vacation_dto.price <= 0 or vacation_dto.price >= 10000:
+            raise ValueError("Price cannot be zero or negative or more than 10000")
 
         if vacation_dto.arrival > vacation_dto.departure:
-            raise ValueError("Arrival date cannot be later than departure date")
+            raise ValueError(
+                "Arrival date cannot be later than departure date")
 
         if self.vacation_dao.get_vacation_arrival_departure_time(vacation_dto.arrival, vacation_dto.departure) is not None:
-            raise ValueError("You can't enter an existing arrival, departure dates")
+            raise ValueError(
+                "You can't enter an existing arrival, departure dates")
 
     def validate_update_of_new_vacation(self, vacation_dto: VacationDto, column: str, new_value: str) -> None:
         """
@@ -61,11 +64,13 @@ class VacationService:
 
         elif column == "arrival":
             if new_value > vacation_dto.departure:
-                raise ValueError("Arrival date cannot be later than departure date")
-        
+                raise ValueError(
+                    "Arrival date cannot be later than departure date")
+
         elif column == "departure":
             if new_value < vacation_dto.arrival:
-                raise ValueError("Departure date cannot be earlier than arrival date")
+                raise ValueError(
+                    "Departure date cannot be earlier than arrival date")
 
     def register_new_vacation(self, vacation_dto: VacationDto) -> None:
         """
@@ -98,4 +103,3 @@ class VacationService:
         :param id: The ID of the vacation to delete
         """
         self.vacation_dao.delete_vacation_info_by_id(id)
-

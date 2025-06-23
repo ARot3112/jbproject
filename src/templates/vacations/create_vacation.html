@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='create_vacation.css') }}">
+{% endblock %}
+{% block maincontent %}
+<div class="create-vacation-container">
+    <div class="countries-list">
+        <h3>Countries List</h3>
+        <ul>
+        {% for country in countries %}
+            <li><strong>{{ country.country_name }}</strong> - ID: {{ country.id }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <div class="create-vacation-form">
+        <h2>Create Vacation</h2>
+        <form action="{{ url_for('vacations.create_vacation') }}" method="post" enctype="multipart/form-data">
+            <input type="text" name="country_name" placeholder="Enter Country Name" required>
+            <input type="text" name="country_id" placeholder="Enter Country ID" required>
+            <input type="text" name="price" placeholder="Enter Price" required>
+            <input type="text" name="arrival" placeholder="Enter Arrival Date" required>
+            <input type="text" name="departure" placeholder="Enter Departure Date" required>
+            <input type="text" name="vacation_description" placeholder="Enter Vacation Description" required>
+            <input type="file" name="image" accept="image/*" required>
+            <button type="submit">Add Vacation</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

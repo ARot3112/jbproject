@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body_class %}login-page{% endblock %}
+
+{% block maincontent %}
+<div class="login-form">
+<h2>Log In</h2>
+<form action="{{url_for('auth.login')}}" method="post">
+    <input type="email" name="email" placeholder="Enter Email">
+    <input type="password" name="password" placeholder="Enter password">
+    <button type="submit">Log-In</button>
+</form>
+</div>
+
+{% endblock %}

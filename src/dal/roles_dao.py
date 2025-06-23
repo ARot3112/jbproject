@@ -1,4 +1,4 @@
-from src.dal.database import test_db_conn
+from src.dal.database import db_conn
 import psycopg.sql
 import psycopg.rows as pgrows
 import psycopg.sql
@@ -19,7 +19,7 @@ class RolesDao:
         Returns:
             List[Dict[str, Any]]: A list of dictionaries containing role information.
         """
-        with test_db_conn.cursor(row_factory=pgrows.dict_row) as cur:
+        with db_conn.cursor(row_factory=pgrows.dict_row) as cur:
             cur.execute(psycopg.sql.SQL(
                 "SELECT * FROM {};").format(psycopg.sql.Identifier(self.table_name)))
             result = cur.fetchall()
@@ -32,12 +32,12 @@ class RolesDao:
         Args:
             name (str): The name of the role.
         """
-        with test_db_conn.cursor() as cur:
+        with db_conn.cursor() as cur:
             cur.execute(
                 psycopg.sql.SQL("INSERT INTO {} (name) VALUES (%s);")
                 .format(psycopg.sql.Identifier(self.table_name)), (name,)
             )
-            test_db_conn.commit()
+            db_conn.commit()
 
     def get_roles_info_by_id(self, id: int) -> List[Dict[str, Any]]:
         """
@@ -49,7 +49,7 @@ class RolesDao:
         Returns:
             List[Dict[str, Any]]: A list containing role details.
         """
-        with test_db_conn.cursor(row_factory=pgrows.dict_row) as cur:
+        with db_conn.cursor(row_factory=pgrows.dict_row) as cur:
             cur.execute(
                 psycopg.sql.SQL("SELECT * FROM {} WHERE id = %s;")
                 .format(psycopg.sql.Identifier(self.table_name)), (id,)
@@ -66,13 +66,13 @@ class RolesDao:
             column (str): The column to update.
             new_value (Any): The new value to set.
         """
-        with test_db_conn.cursor() as cur:
+        with db_conn.cursor() as cur:
             cur.execute(
                 psycopg.sql.SQL("UPDATE {} SET {} = %s WHERE id = %s;")
                 .format(psycopg.sql.Identifier(self.table_name), psycopg.sql.Identifier(column)),
                 (new_value, id),
             )
-            test_db_conn.commit()
+            db_conn.commit()
 
     def delete_roles_info_by_id(self, id: int) -> None:
         """
@@ -81,10 +81,9 @@ class RolesDao:
         Args:
             id (int): The role ID.
         """
-        with test_db_conn.cursor() as cur:
+        with db_conn.cursor() as cur:
             cur.execute(
                 psycopg.sql.SQL("DELETE FROM {} WHERE id = %s;")
                 .format(psycopg.sql.Identifier(self.table_name)), (id,)
             )
-            test_db_conn.commit()
-
+            db_conn.commit()

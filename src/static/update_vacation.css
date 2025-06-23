@@ -1,0 +1,22 @@
+main {
+    overflow: hidden !important;
+}
+
+.update-vacation-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 180px);
+    transform: scale(0.8);
+    
+}
+.update-vacation-form input {
+    margin: 5px;
+}
+
+textarea{
+    height: 100px;
+    width: 300px;
+} 
+

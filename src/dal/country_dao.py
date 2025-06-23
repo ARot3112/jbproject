@@ -1,4 +1,4 @@
-from src.dal.database import test_db_conn
+from src.dal.database import db_conn
 import psycopg.sql
 import psycopg.rows as pgrows
 from typing import List, Dict, Optional
@@ -18,7 +18,7 @@ class CountryDao:
         Returns:
             List[Dict[str, any]]: A list of dictionaries representing countries.
         """
-        with test_db_conn.cursor(row_factory=pgrows.dict_row) as cur:
+        with db_conn.cursor(row_factory=pgrows.dict_row) as cur:
             cur.execute(psycopg.sql.SQL(
                 "SELECT * FROM {};").format(psycopg.sql.Identifier(self.table_name)))
             result = cur.fetchall()
@@ -31,10 +31,10 @@ class CountryDao:
         Args:
             country_name (str): The name of the country to insert.
         """
-        with test_db_conn.cursor() as cur:
+        with db_conn.cursor() as cur:
             cur.execute(psycopg.sql.SQL("INSERT INTO {} (country_name) VALUES (%s);").format(
                 psycopg.sql.Identifier(self.table_name)), (country_name,))
-            test_db_conn.commit()
+            db_conn.commit()
 
     def get_country_info_by_id(self, id: int) -> Optional[Dict[str, any]]:
         """
@@ -46,7 +46,7 @@ class CountryDao:
         Returns:
             Optional[Dict[str, any]]: A dictionary representing the country if found, otherwise None.
         """
-        with test_db_conn.cursor(row_factory=pgrows.dict_row) as cur:
+        with db_conn.cursor(row_factory=pgrows.dict_row) as cur:
             cur.execute(psycopg.sql.SQL(
                 "SELECT * FROM {} WHERE id = %s;").format(psycopg.sql.Identifier(self.table_name)), (id,))
             result = cur.fetchone()
@@ -61,7 +61,7 @@ class CountryDao:
             column (str): The column to update.
             new_value (any): The new value to set.
         """
-        with test_db_conn.cursor() as cur:
+        with db_conn.cursor() as cur:
             cur.execute(
                 psycopg.sql.SQL("UPDATE {} SET {} = %s WHERE id = %s;").format(
                     psycopg.sql.Identifier(
@@ -69,7 +69,7 @@ class CountryDao:
                 ),
                 (new_value, id)
             )
-            test_db_conn.commit()
+            db_conn.commit()
 
     def delete_country_info_by_id(self, id: int) -> None:
         """
@@ -78,7 +78,7 @@ class CountryDao:
         Args:
             id (int): The country ID.
         """
-        with test_db_conn.cursor() as cur:
+        with db_conn.cursor() as cur:
             cur.execute(psycopg.sql.SQL("DELETE FROM {} WHERE id = %s;").format(
                 psycopg.sql.Identifier(self.table_name)), (id,))
-            test_db_conn.commit()
+            db_conn.commit()

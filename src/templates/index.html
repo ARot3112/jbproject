@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block maincontent %}
+  <!-- אנימציית המטוס -->
+  <div class="airplane" id="airplane">✈️</div>
+  
+  <section class="home-page">
+    <div class="cta">
+        {% if session.get('user_name') %}
+          <h2>Hello, {{ session.get('user_name') }}!</h2>
+        {% else %}
+          <h2>Welcome to EasyEscape!</h2>
+        {% endif %}
+        <p>Your one-stop solution for all your travel needs. Whether you're looking for flights, hotels, or vacation packages, we've got you covered!</p>
+      <p>Find your perfect vacation destination. Choose from relaxing beaches, exciting city breaks, or adventurous mountain getaways!</p>
+        {% if session.get('user_name') %}
+            <a href="{{ url_for('vacations.list_vacations') }}" class="cta-btn">Explore Vacations</a>
+        {% else %}
+            <a href="{{ url_for('auth.signup') }}" class="cta-btn">SignUp to Explore vacations </a>
+        {% endif %}
+    </div>
+  </section>
+
+  <script>
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            const airplane = document.getElementById('airplane');
+            airplane.style.animation = 'flyAcross 4s ease-in-out';
+        }, 500);
+    });
+  </script>
+{% endblock %}

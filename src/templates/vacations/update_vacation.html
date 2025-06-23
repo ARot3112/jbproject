@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='update_vacation.css') }}">
+{% endblock %}
+{% block maincontent %}
+<div class="update-vacation-form">
+<h2>Update Vacation</h2>
+<div class="form-container">
+    <form method="POST">
+        <input type="text" name="country_id" value="{{ vacation.country_id }}" placeholder="Country ID" required>
+        <textarea name="vacation_description" placeholder="Vacation Description" required>{{ vacation.vacation_description }}</textarea>
+        <input type="date" name="arrival" value="{{ vacation.arrival }}" placeholder="Arrival Date" required>
+        <input type="date" name="departure" value="{{ vacation.departure }}" placeholder="Departure Date" required>
+        <input type="number" name="price" value="{{ vacation.price }}" placeholder="Price" required>
+         {% if vacation.file_name %}
+            <img src="{{ url_for('static', filename='media/' + vacation.file_name) }}" 
+            style="width: 250px; height: 200px; object-fit: cover;"
+                 onclick="document.getElementById('image').click()">
+        {% else %}
+            <div
+                onclick="document.getElementById('image').click()">
+        </div>
+        {% endif %}
+        
+        <input type="file" name="image" id="image" accept="image/*" style="display: none;">
+        <button type="submit">Update Vacation</button>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </form>
+    </div>
+</div>
+{% endblock %}
