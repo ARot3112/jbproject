@@ -4,7 +4,7 @@
 {% block maincontent %}
 <div class="signup-form">
 <h2>Create your account</h2>
-<form action="{{ url_for('auth.signup') }}" method="post">
+<form action="{{ url_for('auth_ui.signup') }}" method="post">
     <input type="text" name="first_name" placeholder="Enter First Name" required>
     <input type="text" name="last_name" placeholder="Enter Last Name" required>
     <input type="email" name="email" placeholder="Enter Email" required>

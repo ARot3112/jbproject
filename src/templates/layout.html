@@ -19,15 +19,15 @@
   <aside>
     <nav>
       <a href="{{ url_for('home') }}" {% if request.path==url_for('home') %}class="active"{% endif %}>Home</a>
-      <a href="{{ url_for('vacations.list_vacations') }}" {% if request.path == url_for('vacations.list_vacations') %}class="active"{% endif %}>Vacations</a>
+      <a href="{{ url_for('vacations_ui.list_vacations') }}" {% if request.path == url_for('vacations_ui.list_vacations') %}class="active"{% endif %}>Vacations</a>
       {% if session.get('user_name') is none %}
-      <a href="{{ url_for('auth.signup') }}" {% if request.path == url_for('auth.signup') %}class="active"{% endif %}>Sign Up</a>
-      <a href="{{ url_for('auth.login') }}" {% if request.path == url_for('auth.login') %}class="active"{% endif %}>Log In</a>
+      <a href="{{ url_for('auth_ui.signup') }}" {% if request.path == url_for('auth_ui.signup') %}class="active"{% endif %}>Sign Up</a>
+      <a href="{{ url_for('auth_ui.login') }}" {% if request.path == url_for('auth_ui.login') %}class="active"{% endif %}>Log In</a>
       {% else %}
-    <a href="{{ url_for('auth.logout') }}" {% if request.path == url_for('auth.logout') %}class="active"{% endif %}>Log Out</a>
+    <a href="{{ url_for('auth_ui.logout') }}" {% if request.path == url_for('auth_ui.logout') %}class="active"{% endif %}>Log Out</a>
 {% endif %}
 {% if user.role_id == 2 %}
-<a href="{{ url_for('vacations.create_vacation') }}" {% if request.path == url_for('vacations.create_vacation') %}class="active"{% endif %}>Create Vacation</a>
+<a href="{{ url_for('vacations_ui.create_vacation') }}" {% if request.path == url_for('vacations_ui.create_vacation') %}class="active"{% endif %}>Create Vacation</a>
 {% endif %}
 
     </nav>

@@ -10,7 +10,7 @@ def login_required(f):
             if _wants_json():
                 return jsonify({"error": "Unauthorized access"}), 401
             flash("Please log in or sign up to access this page.")
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.ui.login'))
         return f(*args, **kwargs)
     return decorated_function
 

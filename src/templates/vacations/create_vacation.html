@@ -15,7 +15,7 @@
 
     <div class="create-vacation-form">
         <h2>Create Vacation</h2>
-        <form action="{{ url_for('vacations.create_vacation') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url_for('vacations_ui.create_vacation') }}" method="post" enctype="multipart/form-data">
             <input type="text" name="country_name" placeholder="Enter Country Name" required>
             <input type="text" name="country_id" placeholder="Enter Country ID" required>
             <input type="text" name="price" placeholder="Enter Price" required>

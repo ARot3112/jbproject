@@ -1,26 +1,29 @@
-< {% extends "layout.html" %}
+ {% extends "layout.html" %}
 {% block body_class %}vacations-page{% endblock %}
 
 {% block maincontent %}
- 
 <div class="vacation-card">
 {% for vacation in vacations %}
 <div class="card">
     <div class="card-header">
         <h2>{{ vacation.country_name }}</h2>
-    <a href="{{ url_for('vacations.like_vacation', id=vacation.id) }}" class="like-btn">
+    <a href="{{ url_for('vacations_ui.like_vacation', id=vacation.id) }}" class="like-btn">
     <span class="heart {% if vacation.user_liked %}liked{% endif %}">♡</span>
     <span class="like-count">{{ vacation.likes_count }}</span>
 </a>
     </div>
-    <img src="{{ url_for('static', filename='media/' + vacation.file_name) }}" alt="{{ vacation.country_name }}">
+{% if vacation.file_name %}
+  <img src="{{ url_for('static', filename='media/' + vacation.file_name) }}" alt="{{ vacation.country_name }}">
+{% else %}
+  <img src="{{ url_for('static', filename='media/default.jpg') }}" alt="{{ vacation.country_name }}">
+{% endif %}    
     <p>Price: {{ vacation.price }}₪</p>
     <p>Description: {{ vacation.vacation_description }}</p>
     <p>Available from: {{ vacation.arrival }} to {{ vacation.departure }}</p>
 
     {% if user.role_id == 2 %}
-        <a href="{{ url_for('vacations.update_vacation', id=vacation.id) }}" class="btn btn-primary">Update</a>
-        <a href="{{ url_for('vacations.delete_vacation', id=vacation.id) }}" class="btn btn-danger">Delete</a>
+        <a href="{{ url_for('vacations_ui.update_vacation', id=vacation.id) }}" class="btn btn-primary">Update</a>
+        <a href="{{ url_for('vacations_ui.delete_vacation', id=vacation.id) }}" class="btn btn-danger">Delete</a>
     {% endif %}
 </div>
 {% endfor %}

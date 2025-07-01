@@ -39,6 +39,7 @@ class VacationDao:
                  vacation_dto.departure, vacation_dto.price, vacation_dto.file_name)
             )
             db_conn.commit()
+  
 
     def get_vacation_info_by_id(self, id: int) -> Optional[Dict[str, Any]]:
         """

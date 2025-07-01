@@ -32,12 +32,18 @@ from tests.services.test_vacation_service import (
 from tests.routes.test_auth_route import (
     TestJson,
     TestHtml,
-    TestNegativeHtml
+    TestNegativeAuthHtml,
+    TestNegativeAuthJson,
 
 )
 
+from tests.routes.test_vacation_route import (
+    TestVacationHtml,
+    TestVacationJson,
+    TestNegativeVacationsHtml
+)
+
 def test_all():
-    # כל המחלקות שברצונך להריץ
     test_cases = [
         # services
         TestVacationDao,
@@ -49,7 +55,11 @@ def test_all():
         # routes (frontend)
         TestJson,
         TestHtml,
-        TestNegativeHtml
+        TestNegativeAuthHtml,
+        TestNegativeAuthJson,
+        TestVacationHtml,
+        TestVacationJson,
+        TestNegativeVacationsHtml
     ]
 
     suite = TestSuite()

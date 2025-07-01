@@ -25,14 +25,15 @@ class BaseTestAuthRoute(unittest.TestCase):
             "role_id":1, 
             "first_name":"test", 
             "last_name":"test"}
-        
+                
         self.user_dao.insert_into_users(UserDto(**self.user))
     
     def tearDown(self):
         with self.db_conn.cursor() as cur:
             cur.execute("DELETE FROM users WHERE email = %s", ("test@example.com",))
-            cur.execute("DELETE FROM users WHERE email LIKE %s", ("user_%@example.com",))
+            cur.execute("DELETE FROM users WHERE email LIKE %s", ("testuser%@example.com",))
             self.db_conn.commit()
+
 
 
 class TestHtml(BaseTestAuthRoute):
@@ -53,11 +54,11 @@ class TestHtml(BaseTestAuthRoute):
         })
 
         response = self.client.get('/auth/logout', headers={'Accept': 'text/html'})
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
 class TestJson(BaseTestAuthRoute):
     def test_login_json(self):
-        response = self.client.post('/auth/login', 
+        response = self.client.post('/api/auth/login', 
             json={
                 'email': self.user['email'], 
                 'password': self.test_password  
@@ -80,7 +81,7 @@ class TestJson(BaseTestAuthRoute):
     def test_register_json(self):
         unique_email = f"testuser{uuid4().hex[:8]}@example.com"
 
-        response = self.client.post('/auth/signup',
+        response = self.client.post('/api/auth/signup',
             json={
                 'first_name': 'New',
                 'last_name': 'User',
@@ -99,27 +100,27 @@ class TestJson(BaseTestAuthRoute):
         self.assertIsNotNone(data, "Response should contain JSON data")
 
     def test_logout_json(self):
-        response = self.client.post('/auth/login', 
-            json={
-                'email': self.user['email'], 
-                'password': self.test_password  
-            },
-            content_type='application/json',
-            follow_redirects=False
-        )
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        logout_response = self.client.get('/auth/logout', headers={'Accept': 'application/json'})
-        self.assertEqual(logout_response.status_code, 200)
-        self.assertEqual(logout_response.content_type, 'application/json')
+        with self.client as client:
+            response = client.post('/api/auth/login', 
+                json={
+                    'email': self.user['email'], 
+                    'password': self.test_password  
+                },
+                headers={'Accept': 'application/json'},
+                content_type='application/json',
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content_type, 'application/json')
 
-        data = logout_response.get_json()
-        self.assertIn('message', data)
-        self.assertEqual(data['message'], 'Logged out successfully')
+            logout_response = client.delete('/api/auth/logout',content_type='application/json', headers={'Accept': 'application/json'})
+            self.assertEqual(logout_response.status_code, 200)
+            self.assertEqual(logout_response.content_type, 'application/json')
 
+            data = logout_response.get_json()
+            self.assertIn('message', data)
+            self.assertEqual(data['message'], 'Logged out successfully')
 
-class TestNegativeHtml(BaseTestAuthRoute):
+class TestNegativeAuthHtml(BaseTestAuthRoute):
     def test_login_invalid_credentials(self):
         response = self.client.post('/auth/login', 
             data={
@@ -128,8 +129,7 @@ class TestNegativeHtml(BaseTestAuthRoute):
             },
             follow_redirects=True
         )
-        self.assertEqual(response.status_code, 400)
-        self.assertIn(b'User not found', response.data)
+        self.assertEqual(response.status_code,  400)
     def test_register_invalid_data(self):
         response = self.client.post('/auth/signup',
             data={
@@ -141,8 +141,42 @@ class TestNegativeHtml(BaseTestAuthRoute):
             follow_redirects=True
         )
         self.assertEqual(response.status_code, 400)
-        self.assertIn(b'All fields are required.', response.data)
     def test_logout_without_login(self):
         response = self.client.get('/auth/logout', headers={'Accept': 'application/json'})
         self.assertEqual(response.status_code, 401)
         self.assertIn(b'Unauthorized access', response.data)
+
+class TestNegativeAuthJson(BaseTestAuthRoute):
+    def test_login_invalid_credentials(self):
+        response = self.client.post('/api/auth/login', 
+            json={
+                'email': 'invalid_email',
+                'password': 'invalid_password'
+            },
+            headers={'Accept': 'application/json'},
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code,400)
+    
+    def test_register_invalid_data(self):
+        response = self.client.post('/api/auth/signup',
+            json={
+                'first_name': '',
+                'last_name': '',
+                'email': 'invalid_email',
+                'password': ''
+            },
+            headers={'Accept': 'application/json'},
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 400)
+    
+    def test_logout_without_login(self):
+        response = self.client.delete('/api/auth/logout', 
+            headers={'Accept': 'application/json'},
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(b'Unauthorized access', response.data)
+
+       

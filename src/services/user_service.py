@@ -16,11 +16,10 @@ class UserServices:
     def validate_user_before_insert(self, user_dto: UserDto) -> None:
         """
         Validates the user data before inserting it into the database.
-
-        :param user_dto: UserDto object containing the user's data.
+        :param user_dto: UserDto object containing the user's registration data.
         :raises TypeError: If user_dto is not an instance of UserDto.
-        :raises ValueError: If role_id is 2, email format is invalid, password is too short,
-                           or if the email already exists in the system.
+        :raises ValueError: If role_id is 2, if email format is invalid, if password is too short,
+                            or if the email already exists in the system.
         """
         if not isinstance(user_dto, UserDto):
             raise TypeError("UserDto type expected for user_dto.")
